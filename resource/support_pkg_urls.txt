@@ -1,0 +1,8 @@
+#pkg_name	url
+DATA	divine-0.1.2_data.tar.bz2.aa	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.aa
+DATA	divine-0.1.2_data.tar.bz2.ab	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ab
+DATA	divine-0.1.2_data.tar.bz2.ac	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ac
+DATA	divine-0.1.2_data.tar.bz2.ad	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ad
+DATA	divine-0.1.2_data.tar.bz2.ae	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ae
+DATA	divine-0.1.2_data.tar.bz2.af	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.af
+MODULES	divine-0.1.2_modules.tar.bz2	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_modules.tar.bz2
