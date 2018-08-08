@@ -2,6 +2,8 @@
 
 Divine is designed to make molecular diagnosis with high-throughput whole exome sequencing data more effective. Using both patient phenotypic information and genetic variants, Divine that integrates patients’ phenotype(s) and WES data with 30 biological prior knowledge (e.g., human phenotype ontology, gene ontology, pathway database, protein-protein interaction networks, and etc.) to prioritize potential disease-causing genes.
 
+![Divine_workflow](documents/oxfj_bioinf2018_hong/slide_figures/divine_v0.7.png)
+
 ## Website
 
 https://github.com/hwanglab/divine
@@ -12,7 +14,7 @@ https://github.com/hwanglab/divine
 - or (and) VCF file
 
 # Algorithm
-- Refer to "Divine: Disease-causing genes/Variant prioritization in clINical whole Exome sequencing data", Hong. *et. al.*
+- Refer to "Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data", Hong. *et. al.*
 
 # Output
 - When only HPO IDs are given, Divine generates a prioritized gene list and an inferred disease list.
@@ -20,7 +22,7 @@ https://github.com/hwanglab/divine
 - If VCF file (or with HPO IDs), Divine also generates an annotated variant table with a ranking score in Microsoft Excel format.
 
 # Developer note
-- This is the README file for the Divine program. Divine is in active development. Please check the above website for newer available versions. Please contact the developers at changjin.hong@gmail.com to report any problems or for additional help.
+- This is the README file for the Divine program. Divine is in active development. Please check the above website for newer available versions. Please contact the developer at hongc2@ccf.org to report any problems or for additional help.
 
 # Setup
 
