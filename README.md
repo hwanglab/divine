@@ -1,3 +1,5 @@
+![Divine_workflow](documents/oxfj_bioinf2018_hong/slide_figures/divine_logo_small.PNG)
+
 # *Divine* : Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data
 
 Divine is designed to make molecular diagnosis with high-throughput whole exome sequencing data more effective. Using both patient phenotypic information and genetic variants, Divine that integrates patients’ phenotype(s) and WES data with 30 biological prior knowledge (e.g., human phenotype ontology, gene ontology, pathway database, protein-protein interaction networks, and etc.) to prioritize potential disease-causing genes.

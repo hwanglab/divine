@@ -1,8 +1,7 @@
-#pkg_name	url
-DATA	divine-0.1.2_data.tar.bz2.aa	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.aa
-DATA	divine-0.1.2_data.tar.bz2.ab	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ab
-DATA	divine-0.1.2_data.tar.bz2.ac	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ac
-DATA	divine-0.1.2_data.tar.bz2.ad	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ad
-DATA	divine-0.1.2_data.tar.bz2.ae	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.ae
-DATA	divine-0.1.2_data.tar.bz2.af	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.bz2.af
-MODULES	divine-0.1.2_modules.tar.bz2	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_modules.tar.bz2
+#pkg_name	url	md5
+DATA	divine-0.1.2_data.tar.xz.aa	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.xz.aa	4800c28d2d2689fa517e04e81829b0c1
+DATA	divine-0.1.2_data.tar.xz.ab	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.xz.ab	12df8961de16cd0e16e973c14b388a96
+DATA	divine-0.1.2_data.tar.xz.ac	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.xz.ac	d3d0e4c9526041cfa195dd6677a8b96c
+DATA	divine-0.1.2_data.tar.xz.ad	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.xz.ad	83cec06d9987a043412de00e0903c0eb
+MODULES	divine-0.1.2_modules.tar.xz	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_modules.tar.xz	fbd3f82f965ad72fd4c8a7a33f3c1112
+EXAMPLES	divine-0.1.2_examples.tar.xz	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_examples.tar.xz	1833bb5f9f433af8a9bea825545db92c

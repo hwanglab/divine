@@ -75,13 +75,18 @@ class Divine:
 		self.config_fn = config_fn
 		self.entries = {'divine_root':divine_root_dir}
 		self._set_args(uargs)
-		
-		self.hpo2disease_fn = self._assign_out_fn('hpo_to_diseases','tsv')
-		self.pheno_dmg_fn = self._assign_out_fn('pheno_gene_rank','tsv')
-		self.gene_rank_fn = self._assign_out_fn('gene_rank','tsv')
-		self.disease_rank_fn = self._assign_out_fn('diseases_rank','tsv')
-		
+
 		self.hpo_query = uargs.hpo_query
+		if self.hpo_query is None:
+			self.hpo2disease_fn = None
+			self.pheno_dmg_fn = None
+			self.disease_rank_fn = None
+		else:
+			self.hpo2disease_fn = self._assign_out_fn('hpo_to_diseases','tsv')
+			self.pheno_dmg_fn = self._assign_out_fn('pheno_gene_rank','tsv')
+			self.disease_rank_fn = self._assign_out_fn('diseases_rank','tsv')
+
+		self.gene_rank_fn = self._assign_out_fn('gene_rank', 'tsv')
 		self.vcf = uargs.vcf
 		self.ped = None
 		self.proband_id = None
@@ -882,44 +887,52 @@ class Divine:
 		-objective:
 		-output: dictionary {gene:genetic damaged score}
 		'''
-		
 		job_name = 'preprocess_dmg_scores'
-		msg='start to predict genetic damage score from variants in the provided VCF [%s]' % (job_name)
-		lib_utils.msgout('notice',msg);self.logger.info(msg)
-		
-		msg = 'loading training model of CADD/GERP w.r.t AA change...'
-		lib_utils.msgout('notice',msg);self.logger.info(msg)
-		try:
-			beta_fit_dill = self.entries['beta_fit']
-			msg='loading beta fit cdf[%s] for conservation score w.r.t. AA'%beta_fit_dill
-			lib_utils.msgout('notice',msg); self.logger.info(msg)
-			fp = open(beta_fit_dill, 'rb')
-			beta_fits = dill.load(fp)
-			fp.close()
-		except:
-			beta_fits = [None, None, None]
-		
-		# to extract some info from annotated/filterd VCF to evaluate the genetic mutation damage
-		# [gene, indel, class_tag, protein_len, in-sillico pred score, maf_offset, zygosity]
-		mutation_info = self._extract_mutation_info(beta_fits)
-
-		# to get a gene list having genetic mutations
 		gdmg = []
-		for minfo in mutation_info:
-			if minfo[0] not in gdmg:
-				gdmg.append(minfo[0])
-		gdmg = list(set(gdmg))
+
+		if self.vcf:
+			msg='start to predict genetic damage score from variants in the provided VCF [%s]' % (job_name)
+			lib_utils.msgout('notice',msg);self.logger.info(msg)
+
+			msg = 'loading training model of CADD/GERP w.r.t AA change...'
+			lib_utils.msgout('notice',msg);self.logger.info(msg)
+			try:
+				beta_fit_dill = self.entries['beta_fit']
+				msg='loading beta fit cdf[%s] for conservation score w.r.t. AA'%beta_fit_dill
+				lib_utils.msgout('notice',msg); self.logger.info(msg)
+				fp = open(beta_fit_dill, 'rb')
+				beta_fits = dill.load(fp)
+				fp.close()
+			except:
+				beta_fits = [None, None, None]
+
+			# to extract some info from annotated/filterd VCF to evaluate the genetic mutation damage
+			# [gene, indel, class_tag, protein_len, in-sillico pred score, maf_offset, zygosity]
+			mutation_info = self._extract_mutation_info(beta_fits)
+
+			# to get a gene list having genetic mutations
+
+			for minfo in mutation_info:
+				if minfo[0] not in gdmg:
+					gdmg.append(minfo[0])
+				gdmg = list(set(gdmg))
 
 		if self.hpo2disease_fn:
 			self._store_hposim_outfn(self.hpo2disease_fn, self.top_k_disease, gdmg)
 
 		# to enrich phenogenes (update self.pheno_dmg)
-		if self.hpo_query and self.dm.go_seed_k>0:
+		if self.hpo_query and self.dm.go_seed_k>0 and gdmg:
 			self.enrich_pheno_genes(gdmg)
 
-		# combine variant location and conservation pred dmg
-		self._predict_gt_dmg(mutation_info)
-		
+		if self.vcf:
+			# combine variant location and conservation pred dmg
+			self._predict_gt_dmg(mutation_info)
+		elif self.hpo_query:
+			for gene in self.pheno_dmg.iterkeys():
+				if gene not in self.gt_dmg:
+					self.gt_dmg[gene] = SnvGene()
+				self.gt_dmg[gene].score = self.pheno_dmg[gene].score
+
 		msg = 'done. [%s]'%job_name
 		lib_utils.msgout('notice',msg); self.logger.info(msg)
 
@@ -1127,28 +1140,53 @@ class Divine:
 				max_score = pdmg.score
 		return gene_max
 
+	def simple_bayesian_pred(self, pdmg, gdmg):
+
+		if pdmg > 0. and gdmg > 0.:
+			comb_score = [pdmg * gdmg / (pdmg * gdmg \
+																						+ (1. - pdmg) * (1. - gdmg)), 0.]
+		else:
+			comb_score = [0., 0.]
+		return comb_score
+
 	def combine_pheno_gt_dmg(self):
 
 		job_name = 'combine_pheno_gt_dmg'
 
 		msg = 'combining both phenotypes[%s] and geneotype[%s] damage scores ... [%s]' % \
 					(self.hpo_query, self.vcf, job_name)
-		lib_utils.msgout('notice', msg);
+		lib_utils.msgout('notice', msg)
 		self.logger.info(msg)
 
+		L = len(self.gt_dmg.keys())
+		msg = "total number of genes to investigate [%d]" % L
+		lib_utils.msgout('notice', msg)
 		# to prepare final gene-level dmg score self.gene_dmg
-		for gene in self.gt_dmg.iterkeys():
-			gdmg = (1. - self.dm.ptwt) * self.gt_dmg[gene].score
-			pdmg = self.dm.ptwt * self.gt_dmg[gene].pheno_score
-
-			if pdmg > 0. and gdmg > 0.:
-				self.gene_dmg[gene] = [pdmg * gdmg / (pdmg * gdmg \
-																							+ (1. - pdmg) * (1. - gdmg)), 0.]
-			else:
-				self.gene_dmg[gene] = [0., 0.]
+		if L==0:
+			msg = 'combine_phenotype_gt_dmg() should not be called when neither VCF nor HPO query is given!'
+			lib_utils.msgout('error',msg)
+			raise RuntimeError(msg)
+		elif not self.vcf:
+			gdmg0 = 1. / L
+			for gene in self.gt_dmg.iterkeys():
+				pdmg = (1. - self.dm.ptwt) * self.gt_dmg[gene].score
+				gdmg = gdmg0
+				self.gene_dmg[gene] = self.simple_bayesian_pred(pdmg, gdmg)
+		elif not self.hpo_query:
+			pdmg0 = 1. / L
+			for gene in self.gt_dmg.iterkeys():
+				gdmg = (1. - self.dm.ptwt) * self.gt_dmg[gene].score
+				pdmg = pdmg0
+				self.gene_dmg[gene] = self.simple_bayesian_pred(pdmg, gdmg)
+		else:
+			self.logger.info(msg)
+			for gene in self.gt_dmg.iterkeys():
+				gdmg = (1. - self.dm.ptwt) * self.gt_dmg[gene].score
+				pdmg = self.dm.ptwt * self.gt_dmg[gene].pheno_score
+				self.gene_dmg[gene] = self.simple_bayesian_pred(pdmg, gdmg)
 
 		msg = 'done. [%s]' % job_name
-		lib_utils.msgout('notice', msg);
+		lib_utils.msgout('notice', msg)
 		self.logger.info(msg)
 
 		return self.gene_dmg
@@ -1268,7 +1306,7 @@ class Divine:
 
 def main():
 	parser = argparse.ArgumentParser(description="Divine (v%s) [author:%s]"%(VERSION,author_email))
-	parser.add_argument('-q','--hpo', dest='hpo_query', required=False, default=None, help='Input patient HPO file. A file contains HPO IDs (e.g., HP:0002307), one entry per line. Refer to http://compbio.charite.de/phenomizer or https://mseqdr.org/search_phenotype.php')
+	parser.add_argument('-q','--hpo', dest='hpo_query', required=False, default=None, help='Input patient HPO file. A file contains HPO IDs (e.g., HP:0002307), one entry per line. Refer to http://compbio.charite.de/phenomizer, https://hpo.jax.org, or https://mseqdr.org/search_phenotype.php')
 	
 	parser.add_argument('-v','--vcf', dest='vcf', required=False, default=None, help='input vcf file')
 	parser.add_argument('-o','--out_dir', action='store', dest='out_dir', required=False, default=None, help='output directory without white space. If not exist, the directory will be created.')
@@ -1320,7 +1358,7 @@ def main():
 
 		msg = 'done. [phenotype analysis]'
 		lib_utils.msgout('notice',msg); dv.logger.info(msg)
-		 
+
 	# analyze genotype if available
 	if dv.vcf:
 		msg = 'analyzing variants on [%s] ...'%dv.vcf
@@ -1338,29 +1376,32 @@ def main():
 		if dv.proband_id:
 			dv.annotate_comphet_inherit()
 		
-		# to enrich phenogenes and also predict genetic damage score
-		dv.preprocess_dmg_scores()
+	# to enrich phenogenes and also predict genetic damage score
+	dv.preprocess_dmg_scores()
 
-		# to normalize both pheno and gt dmg scores
-		dv.normalize2()
+	# to normalize both pheno and gt dmg scores
+	dv.normalize2()
 
-		# to combine two damage scores
-		_ = dv.combine_pheno_gt_dmg()
+	# to combine two damage scores
+	_ = dv.combine_pheno_gt_dmg()
 
-		pagerank.run_heatdiffusion(dv,dv.logger)
-		
+	pagerank.run_heatdiffusion(dv,dv.logger)
+
+	if dv.vcf:
 		## to generate an excel file report with a ranking score
 		dv.run_vcf2xls()
-		
 		msg = 'Done.\nCheck vcf[%s]\nxls[%s]\nranked_gene_fn[%s]\nranked_disease_fn[%s].'%\
 			(dv.vcf, dv.xls, dv.gene_rank_fn, dv.disease_rank_fn)
 		
-	else:
+	elif args.hpo_query:
 		# print ranked phenotype score per gene
 		dv.rank_pheno_gene()
 		msg = 'Done.\nCheck HPO-to-disease_similarity_fn[%s]\nranked_gene_fn[%s].'%\
 			(dv.hpo2disease_fn,dv.gene_rank_fn)
-			
+	else:
+		lib_utils.msgout('notice', msg, '[WARNING] Nothing to run');
+		dv.logger.info(msg)
+
 	lib_utils.msgout('notice',msg,'Divine'); dv.logger.info(msg)
 	
 	#to cleanup
@@ -1368,7 +1409,6 @@ def main():
 	
 	lib_utils.msgout('banner','Divine (v%s) is finished for [HPO:%s, VCF:%s].\nContact to %s for any question/error report/feedback'%\
 		(VERSION,args.hpo_query,args.vcf,author_email))
-	
-	
+
 if __name__ == '__main__':
 	main()

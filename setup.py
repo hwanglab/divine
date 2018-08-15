@@ -9,6 +9,18 @@ import subprocess as sp
 VERSION = '0.1.2'
 author_email = 'hongc2@ccf.org'
 
+import hashlib
+
+def md5Checksum(filePath):
+	with open(filePath, 'rb') as fh:
+		m = hashlib.md5()
+		while True:
+			data = fh.read(8192)
+			if not data:
+				break
+			m.update(data)
+		return m.hexdigest()
+
 def cmd_exists(cmd):
 	return sp.call("type " + cmd, shell=True,\
 		stdout=sp.PIPE, stderr=sp.PIPE) == 0
@@ -78,7 +90,10 @@ class Setup():
 		self.gcndata = 'gcndata'
 		self.gcndb = 'gcndb'
 		self.gcnlog = 'gcn/logs/gcn.log'
-		
+		log_dir = os.path.join(self.install_dir,'gcn','logs')
+		if os.path.exists(log_dir):
+			os.makedirs(log_dir)
+
 		self.user_has_pythonpath=os.environ.get('PYTHONPATH',None)
 		
 		if url_fn is None:
@@ -111,7 +126,7 @@ class Setup():
 		fp = open(self.url_fn)
 		for i in fp:
 			if i.startswith('#'):continue
-			category,res_name,res_url = i.strip().split('\t')
+			category,res_name,res_url,org_md5 = i.strip().split('\t')
 			
 			if ucategory and (ucategory != category):
 				continue
@@ -123,7 +138,12 @@ class Setup():
 
 		fp.close()
 		print "Done."
-		
+
+		print "Check if md5 is matched ..."
+		your_md5 = md5Checksum(dn_fn)
+		if your_md5 != org_md5:
+			raise RuntimeError('%s: Expected MD5 [%s] is not same as the one you generated[%s]'%(dn_fn,org_md5,your_md5))
+
 		print "extracting resource files (it may take a couple of hours to complete and be patient) ..."
 		
 		extracted = []
@@ -132,11 +152,11 @@ class Setup():
 		#to extract multi-volume tar.bz2
 		for fn in dn_fns:
 			if 'tar.bz2' in fn:
-				mObj = re.search(r'(\S+)\.tar\.bz2\.\S+',fn)
+				mObj = re.search(r'(\S+)\.tar\.xz\.\S+',fn)
 				if mObj:
-					fbase='%s.tar.bz2'%mObj.group(1)
+					fbase='%s.tar.xz'%mObj.group(1)
 					arch_path = os.path.join(dn_dir,fbase)
-					cmd = "cat %s.* | tar -xvjf - -C %s"%(arch_path,self.install_dir)
+					cmd = "cat %s.* | tar -xvJf - -C %s"%(arch_path,self.install_dir)
 				else:
 					arch_path = os.path.join(dn_dir,fn)
 					cmd = "tar -xvjf %s -C %s"%(arch_path,self.install_dir)
@@ -276,7 +296,7 @@ def main():
 		if not check_network_on():
 			raise RuntimeError('it requires network connection to setup Divine!')
 		cs.install_python_libs()
-		cs.download_data(ucategory='EXAMPLE')
+		cs.download_data(ucategory='EXAMPLES')
 
 		if args.update_db:
 			cs.download_data(ucategory='DATA')
