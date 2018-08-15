@@ -139,19 +139,20 @@ class Setup():
 		fp.close()
 		print "Done."
 
-		print "Check if md5 is matched ..."
-		your_md5 = md5Checksum(dn_fn)
-		if your_md5 != org_md5:
-			raise RuntimeError('%s: Expected MD5 [%s] is not same as the one you generated[%s]'%(dn_fn,org_md5,your_md5))
+		if (False):
+			print "Check if md5 is matched ..."
+			your_md5 = md5Checksum(dn_fn)
+			if your_md5 != org_md5:
+				raise RuntimeError('%s: Expected MD5 [%s] is not same as the one you generated[%s]'%(dn_fn,org_md5,your_md5))
 
-		print "extracting resource files (it may take a couple of hours to complete and be patient) ..."
-		
+		print "extracting resource files (it may take a couple of hours to complete the installation and be patient) ...\nAfter the installation, add some environment variables to your bash shell configuration file (~/.bashrc or ~/bash_profile).\nFollow the instruction at the end of the installation"
+
 		extracted = []
 		#to backup data
-		#tar cvzf - divine/{gcndb,gcn/bin/prioritize/examples} | split -b 1GB - divine-0.1.2_data.tar.bz2.
+		#tar cvJf - {gcndb,gcn/bin/prioritize/examples} | split -b 4GB - divine-0.1.2_data.tar.xz.
 		#to extract multi-volume tar.bz2
 		for fn in dn_fns:
-			if 'tar.bz2' in fn:
+			if 'tar.xz' in fn:
 				mObj = re.search(r'(\S+)\.tar\.xz\.\S+',fn)
 				if mObj:
 					fbase='%s.tar.xz'%mObj.group(1)
@@ -159,7 +160,7 @@ class Setup():
 					cmd = "cat %s.* | tar -xvJf - -C %s"%(arch_path,self.install_dir)
 				else:
 					arch_path = os.path.join(dn_dir,fn)
-					cmd = "tar -xvjf %s -C %s"%(arch_path,self.install_dir)
+					cmd = "tar -xvJf %s -C %s"%(arch_path,self.install_dir)
 
 				if arch_path not in extracted:
 					extracted.append(arch_path)
@@ -246,8 +247,6 @@ class Setup():
 			set_link = '='
 			shell_cnf_fn= '$HOME/.profile, $HOME/.bash_profile, or $HOME/.bashrc'
 
-		msg = "%s DIVINE%s%s\n"%(set_keyword,set_link,self.install_dir)
-
 		hline = "-------------------------------"
 
 		if setup_mode == 'install':
@@ -259,20 +258,19 @@ class Setup():
 			desc2='from'
 		
 		print "\n"
-		print '-First, %s the following variables %s your shell script (e.g., %s).'%(desc1,desc2,shell_cnf_fn)
-		print hline
-		print msg
-		
+		print '-Open %s your shell script (e.g., %s).'%(desc1,desc2,shell_cnf_fn)
 		print "-Then, %s the following variables %s PATH and PYTHONPATH in your shell script if not set(e.g., %s)."%(desc1,desc2,shell_cnf_fn)
 		print hline
-		msg = "%s PATH=$HOME/.local/bin:$PATH"%(set_keyword,set_link)
+
+		msg = "%s DIVINE%s%s\n" % (set_keyword, set_link, self.install_dir)
+		msg += "%s PATH=$HOME/.local/bin:$PATH\n"%(set_keyword)
 		msg += "%s PATH%s$DIVINE/gcn/bin/prioritize:$PATH\n"%(set_keyword,set_link)
 		msg += "%s PYTHONPATH%s$DIVINE"%(set_keyword,set_link)
 		
 		if self.user_has_pythonpath: msg += ":$PYTHONPATH\n"
 		else: msg += "\n"
 		
-		msg += "%s PYTHONPATH%s$DIVINE/%s:$PYTHONPATH\n"%(set_keyword,set_link,self.pylib_prefix)
+		# msg += "%s PYTHONPATH%s$DIVINE/%s:$PYTHONPATH\n"%(set_keyword,set_link,self.pylib_prefix)
 		msg += "%s PYTHONPATH%s$DIVINE/%s/%s/%s/%s:$PYTHONPATH\n"%\
 			(set_keyword,set_link,self.pylib_prefix,'lib',get_pylib_prefix(),self.pylib_build_prefix)
 		print msg
