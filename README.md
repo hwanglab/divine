@@ -9,6 +9,8 @@ Divine is designed to make a daily-routine molecular diagnosis with high-through
 ## Website
 
 https://github.com/hwanglab/divine
+# Tutorial
+A [tutorial](https://github.com/hwanglab/divine/blob/master/documents/tutorial/divine_tutorial.md) is available, from the installation to case studies.
 
 # Input
 - a text file containing Human Phenotype Ontology (HPO) IDs (e.g., HP:0002307) that describe patient's clinical features
@@ -16,7 +18,7 @@ https://github.com/hwanglab/divine
 - or (and) VCF file
 
 # Algorithm
-- Refer to "Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data", Hong. *et. al.*
+- Refer to [Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data", Hong. *et. al.*](https://www.biorxiv.org/content/early/2018/08/21/396655)
 
 # Output
 - When only HPO IDs are given, Divine generates a prioritized gene list and an inferred disease list.
@@ -24,7 +26,7 @@ https://github.com/hwanglab/divine
 - If VCF file (or with HPO IDs), Divine also generates an annotated variant table with a ranking score in Microsoft Excel format.
 
 # Developer note
-- Divine is in active development. Please check the above website for newer available versions. Please contact the developer at hongc2@ccf.org to report any problems or for additional help.
+- Divine is in active development. Please check the above website for newer available versions. Please contact the developer at hongc2<at>ccf.org to report any problems or for additional help.
 
 # Setup
 
@@ -392,4 +394,4 @@ Not intended for direct clinical application. Divine suggests an order of genes 
 - Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data, Changjin Hong and TaeHyun Hwang (Oxford Bioinformatics Application Note)
 
 # Contact
-- Changjin Hong, Ph.D (hongc2@ccf.org)
+- Changjin Hong, Ph.D (hongc2<at>ccf.org)
