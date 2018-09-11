@@ -190,5 +190,5 @@ def run_bp(genes,prior_vals,nodes2sel,kegg_genes_fn):
 if __name__ == '__main__':
 	genes = ['HLCS','PRMT1','C3','C3AR1']
 	prior_vals=[0.25,0.15,0.30,0.3]
-	fn="/home/hongc2/mount/vm_shared/projects/divine-0.1.1/gcndata/kegg_pathway/kegg_genes.tsv"
+	fn="../../../gcndata/kegg_pathway/kegg_genes.tsv"
 	run_bp(genes,prior_vals,{},kegg_genes_fn=fn)

@@ -1,3 +1,26 @@
+[program_paths]
+varant = gcn/bin/annotpipe.py
+hposim = python_libs/pkg/hpo_similarity/tests/cj_hpo_similarity.py
+genmod = python_libs/bin/genmod
+vcf2xls = gcn/lib/varann/vartype/varant/vcf2xls_varant.py
+
+[database]
+ext_disease_to_gene = gcndata/hpo/ALL_SOURCES_disgnet_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt
+disease_desc = gcndata/hpo/phenotype_annotation.tab
+hpo_obo = gcndata/hpo/hp.obo
+beta_fit = gcndata/snv_training/clin_tr.dill
+string_link = gcndata/stringDB/9606.protein.links.v10.txt
+esp_to_gene = gcndata/stringDB/est2geneSymbol_20160306.tsv
+kegg_hsa = gcndata/kegg_pathway/kegg_genes.tsv
+
+[config]
+temp_dir = /tmp
+vcf_filter_conf = gcn/config/filterconf.txt
+GCN = gcn
+GCN_DATA_DIR = gcndata
+GCN_DB_DIR = gcndb
+GCN_LOGFILE = gcn/logs/gcn.log
+
 [fltr]
 excl=LowQual
 #incl=PASS

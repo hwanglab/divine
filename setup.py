@@ -108,7 +108,81 @@ class Setup():
 		print 'installing %s ...'%pkg_name
 		cmd = "pip install --user %s"%pkg_name
 		syscmd(cmd)
-	
+
+	def download_ucsc_hg19(self):
+		hg19_name = 'DATA_UCSC_hg19'
+		found_url = False
+		fp = open(self.url_fn)
+		for i in fp:
+			if i.startswith('#'): continue
+			category, res_name, res_url, org_md5, target_dir = i.strip().split('\t')
+			if category==hg19_name:
+				found_url = True
+				targetd = os.path.join(self.install_dir, os.path.sep.join(target_dir.split('/')))
+
+				if not os.path.exists(targetd):
+					os.makedirs(targetd)
+
+				bigcat_fn = os.path.join(targetd, 'hg19.fasta')
+				if not os.path.exists(bigcat_fn):
+					dn_fn = os.path.join(targetd,res_name)
+
+					cmd = 'wget -O %s -c %s' % (dn_fn, res_url)
+					print cmd
+					syscmd(cmd)
+
+					cmd = "tar zxvf %s -C %s"%(dn_fn,targetd)
+					print cmd
+					syscmd(cmd)
+
+					inpat = os.path.join(targetd,'chr*.fa')
+					cmd = "cat %s > %s"%(inpat,bigcat_fn)
+					syscmd(cmd)
+					os.unlink(dn_fn)
+					cmd = "rm -rf %s"%inpat
+					syscmd(cmd)
+				break
+
+		fp.close()
+		if found_url:
+			print 'ref hg19[%s] is installed.'%hg19_name
+		else:
+			raise RuntimeError('check the resource URL file if %s in the first column exists!'%hg19_name)
+
+	def download_b37(self):
+		hg19_name = 'DATA_B37'
+		found_url = False
+		fp = open(self.url_fn)
+		for i in fp:
+			if i.startswith('#'): continue
+			category, res_name, res_url, org_md5, target_dir = i.strip().split('\t')
+			if category==hg19_name:
+				found_url = True
+				targetd = os.path.join(self.install_dir, os.path.sep.join(target_dir.split('/')))
+
+				if not os.path.exists(targetd):
+					os.makedirs(targetd)
+				dn_fn = os.path.join(targetd, res_name)
+				print dn_fn
+				if dn_fn.endswith('.gz'):
+					out_fn = os.path.join(targetd, res_name[:-3])
+				else:
+					out_fn = dn_fn
+				if not os.path.exists(out_fn):
+					cmd = 'wget -O %s -c %s' % (dn_fn, res_url)
+					print cmd
+					syscmd(cmd)
+					cmd = "gunzip %s"%dn_fn
+					print cmd
+					os.system(cmd)
+				break
+
+		fp.close()
+		if found_url:
+			print 'ref hg19[%s] is installed.'%hg19_name
+		else:
+			raise RuntimeError('check the resource URL file if %s in the first column exists!'%hg19_name)
+
 	def download_data(self,ucategory=None,keep_download_files=True):
 		
 		print "downloading Divine resource files [%s] ..."%ucategory
@@ -126,7 +200,7 @@ class Setup():
 		fp = open(self.url_fn)
 		for i in fp:
 			if i.startswith('#'):continue
-			category,res_name,res_url,org_md5 = i.strip().split('\t')
+			category,res_name,res_url,org_md5,target_dir = i.strip().split('\t')
 			
 			if ucategory and (ucategory != category):
 				continue
@@ -150,7 +224,7 @@ class Setup():
 		extracted = []
 		#to backup data
 		#tar cvJf - {gcndb,gcn/bin/prioritize/examples} | split -b 4GB - divine-0.1.2_data.tar.xz.
-		#to extract multi-volume tar.bz2
+		#to extract multi-volume tar.xz.*
 		for fn in dn_fns:
 			if 'tar.xz' in fn:
 				mObj = re.search(r'(\S+)\.tar\.xz\.\S+',fn)
@@ -171,7 +245,7 @@ class Setup():
 		if not keep_download_files:
 			for fn in extracted:
 				syscmd('rm -rf %s*'%fn)
-	
+
 	def uninstall_resource(self):
 		shutil.rmtree(os.path.join(self.install_dir,'gcndb'))
 		shutil.rmtree(os.path.join(self.install_dir,'gcndata'))
@@ -258,7 +332,7 @@ class Setup():
 			desc2='from'
 		
 		print "\n"
-		print '-Open %s your shell script (e.g., %s).'%(desc1,desc2,shell_cnf_fn)
+		print '-Open your shell script (e.g., %s).'%(shell_cnf_fn)
 		print "-Then, %s the following variables %s PATH and PYTHONPATH in your shell script if not set(e.g., %s)."%(desc1,desc2,shell_cnf_fn)
 		print hline
 
@@ -299,7 +373,12 @@ def main():
 		if args.update_db:
 			cs.download_data(ucategory='DATA')
 			cs.download_data(ucategory='DATA_DELTA')
+
+		cs.download_ucsc_hg19()
+		cs.download_b37()
+
 		cs.msg_config('install')
+
 	elif args.uninstall:
 		cs.uninstall_python_libs()
 		if args.remove_db:

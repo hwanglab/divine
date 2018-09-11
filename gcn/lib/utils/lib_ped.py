@@ -11,9 +11,11 @@ import gcn.lib.io.vcf as vcf
 UNKNOWN,MALE,FEMALE = range(3)
 HEALTHY,AFFECTED = range(1,3)
 	
-def check_consistency_ped_vcf(vcf,family_file,proband_id,family_type='ped',logger=None):
-	
-	family_parser = FamilyParser(family_file, family_type)
+def check_consistency_ped_vcf(fam_vcf,family_file,proband_id,family_type='ped',logger=None):
+
+	fp = open(family_file,'r')
+	family_parser = FamilyParser(fp, family_type)
+	fp.close()
 
 	family_ids = family_parser.families.keys()
 	F = len(family_ids)
@@ -25,12 +27,13 @@ def check_consistency_ped_vcf(vcf,family_file,proband_id,family_type='ped',logge
 			print msg
 			if logger: logger.error(msg)
 			raise RuntimeError(msg)
-		v = vcf.VCFParser(vcf)
+		print('VCF file [%s]'%fam_vcf) #debug
+		v = vcf.VCFParser(fam_vcf)
 		
 		for ind_id in ind_ids:
 			if ind_id not in v.samples:
 				msg = "individual name [%s] in the pedigree file [%s] does not exist in VCF [%s]" % \
-					(ind_id,family_file,vcf)
+					(ind_id,family_file,fam_vcf)
 				print msg
 				if logger: logger.error(msg)
 				raise RuntimeError(msg)

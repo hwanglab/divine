@@ -26,11 +26,9 @@ incl=lowgmaf
 
  """
 import ConfigParser
-# import gcn.lib.io.snpeff as snpeff
 from gcn.lib.varann.vartype.varant import varant_parser as vp
 from gcn.lib.databases.snpdb import classify_clnsig
 from gcn.lib.databases.snpdb import ClinvarDB
-import gcn.lib.io.vcf as vcf
 import re
 import os
 from html5lib.treewalkers.base import UNKNOWN
@@ -657,8 +655,6 @@ class Filter:
 
 if __name__ == "__main__":
     import argparse
-    from gcn.lib.utils.filter_cj import *
-    import gcn.lib.utils.fileutils as fileutils
     import os
     import gcn.lib.io.vcf as vcf
     

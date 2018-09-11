@@ -109,9 +109,9 @@ if __name__ == '__main__':
 	
 	"""
 	./reformat_cosmic,py
-	-C /media/hong/blackedge/projects/apps/divine-0.1.1/gcndata/cosmic/CosmicCodingMuts.vcf.gz
-	-c /media/hong/blackedge/projects/apps/divine-0.1.1/gcndata/cosmic/CosmicNonCodingVariants.vcf.gz
+	-C gcndata/cosmic/CosmicCodingMuts.vcf.gz
+	-c gcndata/cosmic/CosmicNonCodingVariants.vcf.gz
 	-i 2
-	-o /media/hong/blackedge/projects/apps/divine-0.1.1/gcndata/cosmic/cosmic.vcf
+	-o gcndata/cosmic/cosmic.vcf
 	"""
 	

@@ -93,14 +93,16 @@ class Divine:
 		self.genotype = True
 		
 		if self.vcf:
+			self.is_family_vcf = False
 			if uargs.ped:
+				self.is_family_vcf = True
 				if uargs.proband_id:
 					proband_idx = lib_ped.check_consistency_ped_vcf(\
 															self.vcf,uargs.ped,uargs.proband_id)
 					self.ped = uargs.ped
 					self.proband_id = uargs.proband_id
 				else:
-					msg = "A family file [%s] was provided but you didn't specify proband sample ID in VCF [%s]."\
+					msg = "A family file [%s] was provided but you didn't provide a proband ID to examine. Specify the probrand ID available in the VCF [%s] using an option -p."\
 						%(uargs.ped,self.vcf)
 					print(msg)
 					raise RuntimeError(msg)
@@ -596,7 +598,7 @@ class Divine:
 			vcf_tmp = self.vcf+'.tmp'
 			ostream = open(vcf_tmp, 'w')
 			rmInfo = ['Exonic','Annotation','Compounds']
-			v = vcf.VCFParser(self.vcf, sampleids=[self.proband_id])
+			v = vcf.VCFParser(self.vcf)
 			v.writeheader(ostream,to_del_info = rmInfo)
 		else:
 			rewrite_vcf = False

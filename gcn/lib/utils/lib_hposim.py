@@ -18,10 +18,10 @@ class HpoSim:
 	def __init__(self):
 		#divine_cfg = read_divine_config()
 		
-		hpo_base_dir='/media/hong/blackedge/projects/apps/divine-0.1.1/gcndata/hpo'
+		hpo_base_dir='gcndata/hpo'
 		
 		divine_cfg = {}
-		divine_cfg['hposim'] = '/media/hong/blackedge/projects/apps/divine-0.1.1/python_libs/pkg/hpo_similarity/tests/cj_hpo_similarity.py'
+		divine_cfg['hposim'] = 'python_libs/pkg/hpo_similarity/tests/cj_hpo_similarity.py'
 		divine_cfg['hpo_obo'] = '%s/hp.obo' % hpo_base_dir
 		divine_cfg['ext_disease_to_gene'] = '%s/ALL_SOURCES_disgnet_TYPICAL_FEATURES_diseases_to_genes_to_phenotypes.txt' % hpo_base_dir
 		
