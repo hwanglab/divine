@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''
 COPYRIGHT (C) 2016 changjin.hong@gmail.com
-author: changjin.hong@gmail.com
+author: changjin.hong@gmail.com|hongc2@ccf.org
 '''
 import os, sys, argparse, math, datetime, time, logging
 import pandas as pd

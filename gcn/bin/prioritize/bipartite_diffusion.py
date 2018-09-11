@@ -188,7 +188,7 @@ def run_bp(genes,prior_vals,nodes2sel,kegg_genes_fn):
 	return cB.get_final_scores(Rv,topK=25,nodes2sel=nodes2sel)
 
 if __name__ == '__main__':
-	genes = ['HLCS','PRMT1','C3','C3AR1']
-	prior_vals=[0.25,0.15,0.30,0.3]
+	genes = ['HLCS','PRMT1','C3']
+	prior_vals=[0.25,0.15,0.30]
 	fn="../../../gcndata/kegg_pathway/kegg_genes.tsv"
 	run_bp(genes,prior_vals,{},kegg_genes_fn=fn)

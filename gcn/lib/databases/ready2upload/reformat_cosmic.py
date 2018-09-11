@@ -2,7 +2,6 @@
 '''
 author: changjin.hong@gmail.com
 '''
-import datetime, time
 import os, argparse
 import gcn.lib.io.vcf as vcf
 from gcn.lib.utils import lib_utils

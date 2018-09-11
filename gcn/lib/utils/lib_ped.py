@@ -27,7 +27,7 @@ def check_consistency_ped_vcf(fam_vcf,family_file,proband_id,family_type='ped',l
 			print msg
 			if logger: logger.error(msg)
 			raise RuntimeError(msg)
-		print('VCF file [%s]'%fam_vcf) #debug
+		print('VCF file [%s]'%fam_vcf)
 		v = vcf.VCFParser(fam_vcf)
 		
 		for ind_id in ind_ids:

@@ -1,5 +1,5 @@
 
-import os, sys, argparse, re, math, datetime, time, logging
+import os, sys, re, math, datetime, time, logging
 import lib_utils
 
 class Disease:

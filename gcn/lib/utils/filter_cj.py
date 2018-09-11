@@ -295,7 +295,6 @@ class Filter:
         R (Retired entry)
         '''
         for var in rec.info.HGMD_DESC:
-          #print var #debug
           mObj = re.search(r'(\d+)\((.+)\)',var)
           if mObj:
             hgmd_match = int(mObj.group(1))

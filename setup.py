@@ -76,7 +76,7 @@ class Setup():
 			'backports.ssl-match-hostname','certifi','decorator',\
 				'matplotlib','networkx','nose','numpy','pandas','pygr',\
 					'pyparsing','pysam','python-dateutil','pytz','scipy',\
-						'scikit-learn','singledispatch','six','tornado','xlwt','dill']
+						'scikit-learn','singledispatch','six','tornado','xlwt','dill','ped_parser']
 
 		self.pylib_prefix = 'python_libs'
 		self.pylib = os.path.join(self.install_dir,self.pylib_prefix)
