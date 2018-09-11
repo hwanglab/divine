@@ -30,6 +30,7 @@ from gcn.lib.varann.vartype.varant import varant_parser as vp
 from gcn.lib.databases.snpdb import classify_clnsig
 from gcn.lib.databases.snpdb import ClinvarDB
 import re
+import gcn.lib.io.vcf as vcf
 import os
 from html5lib.treewalkers.base import UNKNOWN
 from sre_constants import NEGATE
