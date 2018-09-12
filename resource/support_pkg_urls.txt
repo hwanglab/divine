@@ -3,7 +3,8 @@ DATA	divine-0.1.2_data.tar.xz.aa	https://s3.us-east-2.amazonaws.com/divine-db/di
 DATA	divine-0.1.2_data.tar.xz.ab	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.xz.ab	12df8961de16cd0e16e973c14b388a96	gcndb
 DATA	divine-0.1.2_data.tar.xz.ac	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.xz.ac	d3d0e4c9526041cfa195dd6677a8b96c	gcndb
 DATA	divine-0.1.2_data.tar.xz.ad	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data.tar.xz.ad	83cec06d9987a043412de00e0903c0eb	gcndb
-MODULES	divine-0.1.2_modules.tar.xz	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_modules.tar.xz	fbd3f82f965ad72fd4c8a7a33f3c1112	/python_libs/pkg
+DATA_DELTA	divine-0.1.2_data_dispatch.tar.xz	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_data_dispatch.tar.xz	.	gcndb
+MODULES	divine-0.1.2_modules.tar.xz	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_modules.tar.xz	fbd3f82f965ad72fd4c8a7a33f3c1112	python_libs/pkg
 EXAMPLES	divine-0.1.2_examples.tar.xz	https://s3.us-east-2.amazonaws.com/divine-db/divine-0.1.2_examples.tar.xz	1833bb5f9f433af8a9bea825545db92c	gcn/bin/prioritize/examples
 DATA_UCSC_hg19	chromFa.tar.gz	http://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/chromFa.tar.gz	.	gcndata/refgenome
 DATA_B37	human_g1k_v37.fasta.gz	ftp://ftp.ncbi.nlm.nih.gov/1000genomes/ftp/technical/reference/human_g1k_v37.fasta.gz	.	gcndata/refgenome

@@ -109,7 +109,7 @@ class Setup():
 		cmd = "pip install --user %s"%pkg_name
 		syscmd(cmd)
 
-	def download_ucsc_hg19(self):
+	def download_ucsc_hg19(self,reuse=True):
 		hg19_name = 'DATA_UCSC_hg19'
 		found_url = False
 		fp = open(self.url_fn)
@@ -124,7 +124,9 @@ class Setup():
 					os.makedirs(targetd)
 
 				bigcat_fn = os.path.join(targetd, 'hg19.fasta')
-				if not os.path.exists(bigcat_fn):
+				if reuse and os.path.exists(bigcat_fn):
+					print "reuse the one downloaded previously"
+				else:
 					dn_fn = os.path.join(targetd,res_name)
 
 					cmd = 'wget -O %s -c %s' % (dn_fn, res_url)
@@ -183,7 +185,7 @@ class Setup():
 		else:
 			raise RuntimeError('check the resource URL file if %s in the first column exists!'%hg19_name)
 
-	def download_data(self,ucategory=None,keep_download_files=True):
+	def download_data(self,ucategory=None,keep_download_files=True,reuse=False):
 		
 		print "downloading Divine resource files [%s] ..."%ucategory
 		
@@ -198,6 +200,7 @@ class Setup():
 			os.makedirs(dn_dir)
 			
 		fp = open(self.url_fn)
+		found_category = False
 		for i in fp:
 			if i.startswith('#'):continue
 			category,res_name,res_url,org_md5,target_dir = i.strip().split('\t')
@@ -208,10 +211,23 @@ class Setup():
 
 			cmd = 'wget -O %s -c %s'%(dn_fn,res_url)
 			dn_fns.append(dn_fn)
-			syscmd(cmd)
+
+			if os.path.exists(dn_fn):
+				found_category = True
+				if reuse:
+					print "reuse the one previously downloaded"
+				else:
+					os.unlink(dn_fn)
+					syscmd(cmd)
+			else:
+				found_category = True
+				syscmd(cmd)
 
 		fp.close()
 		print "Done."
+
+		if not found_category:
+			raise RuntimeError('installation option [%s] was not found in [%s]'%(ucategory,self.url_fn))
 
 		if (False):
 			print "Check if md5 is matched ..."
@@ -371,7 +387,9 @@ def main():
 		cs.download_data(ucategory='EXAMPLES')
 
 		if args.update_db:
-			cs.download_data(ucategory='DATA')
+			cs.download_data(ucategory='DATA_DELTA')
+		else:
+			cs.download_data(ucategory='DATA',reuse=True)
 			cs.download_data(ucategory='DATA_DELTA')
 
 		cs.download_ucsc_hg19()
