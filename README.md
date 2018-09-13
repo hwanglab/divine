@@ -130,7 +130,7 @@ Any VCF file following the standard format (e.g., [https://samtools.github.io/ht
 
 ### Known disease matching by patient phenotypes
 `hpo_to_diseases.tsv`: From an input HPO file, Divine prioritize which disease the patient likely has. The output format is
-```
+```bash
 $ head -n3 hpo_to_disease.tsv
 #disease_ID    genes    score[FunSimMax]
 OMIM:101600    FGFR1,FGFR2    0.000911782
@@ -149,8 +149,8 @@ OMIM:101200    FGFR2    0.000674322
 - gt_dmg_score: a genetic pathogenicity score assessed in VCF file
 - pheno_score: score[FunSimMax] 
  
-```
-head -n6 gene_rank.tsv
+```bash
+$ head -n6 gene_rank.tsv
 #gene   predicted_score seed_score      gt_dmg_score    pheno_score     contain_known_pathogenic
 FGFR2   0.00925436      1.60806e-06     0.00545116      0.00117607      NA
 EVC     0.00634702      1.08469e-06     0.00981397      0.000439834     NA
@@ -161,7 +161,7 @@ ZMYND11|ENSP00000452959 0.00405376      6.66455e-07     0.00745641      0.000356
  
 ### Gene enrichment from known diseases matched by patient phenotypes
 ```bash
-head -n6 diseases_rank.tsv
+$ head -n6 diseases_rank.tsv
 ```
 - disease_ID: disease ID
 - disease_description: disease description
@@ -199,39 +199,38 @@ head -n6 diseases_rank.tsv
 
 - When HPO file is only given,
 
-```
-../divine.py -q dir_to_the_hpo/P0001.hpo -o dir_to_output/P0001
+```bash
+$ divine.py -q dir_to_the_hpo/P0001.hpo -o dir_to_output/P0001
 ```
 
 - When VCF file is only given,
 
-```
-../divine.py -v dir_to_the_vcf/P0002.vcf -o dir_to_output/P0002
-```
-
-- When both HPO file and VCF file are given,
-
-```
-../divine.py -q dir_to_the_hpo/P0003.hpo -v dir_to_the_vcf/P0003.vcf -o dir_to_output/P0003
+```bash
+$ divine.py -v dir_to_the_vcf/P0002.vcf -o dir_to_output/P0002
 ```
 
 - When both HPO file and VCF file are given,
 
+```bash
+$ divine.py -q dir_to_the_hpo/P0003.hpo -v dir_to_the_vcf/P0003.vcf -o dir_to_output/P0003
 ```
-../divine.py -q dir_to_the_hpo/P0003.hpo -v dir_to_the_vcf/P0003.vcf -o dir_to_output/P0003
+
+- For family sample analysis, specify proband ID and pedigree file. 
+
+```bash
+$ divine.py -q dir_to_the_hpo/proband.hpo -v dir_to_the_vcf/multisample.vcf -f dir_to_ped/pedigree.ped -p proband_id -o dir_to_output/proband_id
 ```
 
 ## Examples
-We include 4 to 5 demo samples in the resource package, 
-	
-	```
-	cd $DIVINE/gcn/bin/prioritize/examples
-	./runme_angelman.sh #when only HPO data is available
-	./runme_pfeisffer_noHpo.sh #when only VCF is available 
-	./runme_pfeisffer.sh #when both HPO and VCF are available
-	./runme_millerSyndrome.sh #when both HPO and VCF are available
-	./runme_trio.sh #analyze family samples (PED file requires and sample ID should be matched with the ones in VCF file)
-	```
+We include 4 to 5 demo samples in the resource package,
+```bash
+$ cd $DIVINE/gcn/bin/prioritize/examples
+$ ./runme_angelman.sh #when only HPO data is available
+$ ./runme_pfeisffer_noHpo.sh #when only VCF is available 
+$ ./runme_pfeisffer.sh #when both HPO and VCF are available
+$ ./runme_millerSyndrome.sh #when both HPO and VCF are available
+$ ./runme_trio.sh #analyze family samples (PED file requires and sample ID should be matched with the ones in VCF file)
+```
 
 # Help
 ```
@@ -331,7 +330,7 @@ min=0.1
 
 - A.4: Unless Divine database is changed, or purchase HGMD license newly, or divine.vcf created previously is truncated, you can reuse the previous annotated VCF file using `--reuse`. If you want to compare a new result with the previous one, try
 
-```
+```bash
 $ $DIVINE/gcn/bin/prioritize/divine.py -q dir_to_the_hpo/P0005.hpo \
    -v dir_to_the_vcf/P0005.vcf --reuse -d rev -o dir_to_the_output/P0005
 ```
@@ -346,7 +345,7 @@ $ $DIVINE/gcn/bin/prioritize/divine.py -q dir_to_the_hpo/P0005.hpo \
 
 - Q.7: I know Divine is designed for germline or constitutional disease samples. Can I use Divine for somatic mutation (cancer sample) analysis?
 
-- A.7: We will work on this feature as well.
+- A.7: COSMIC annotation is available. Later, more feature will be available.
 
 - Q.8: I have a patient dataset but I concern if Divine collects the patient dataset without my permission and send it somewhere.
 
@@ -354,7 +353,7 @@ $ $DIVINE/gcn/bin/prioritize/divine.py -q dir_to_the_hpo/P0005.hpo \
 
 - Q.9: Does Divine support analysis for trio samples (e.g., proband, mother, and father)?
 
-- A.9: Yes, if VCF file contains multiple samples, then trio analysis can be done in `divine.xls`. The next release of Divine will provide more systematic trio analysis.
+- A.9: Yes, if VCF file contains multiple samples, then trio analysis can be done in `divine.xls`. The next release of Divine will provide more systematic trio analysis. A demo family sample is available at `$DIVINE/gcn/bin/prioritize/examples`.
 
 - Q.10: I don't have a Linux computer. Can Divine run on MacOS or Windows?
 
@@ -366,11 +365,11 @@ $ $DIVINE/gcn/bin/prioritize/divine.py -q dir_to_the_hpo/P0005.hpo \
 
 - Q.12: My company wants to use Divine.
 
-- A.12: Divine is free for academic or research purpose. Contact to hongc2@ccf.org for commercial use.
+- A.12: Divine is free for academic or research purpose. Contact to hongc2{at}ccf.org for commercial use.
 
 - Q.13: I follow this README file and help. My Divine run fails. Can you help me?
 
-- A.13: Three sample scripts with datasets in `$DIVINE/gcn/bin/prioritize/examples` are available. Use the examples as a template. All three scripts should work if your installation were successful. If the problem is not resolved, send me a log file (e.g., `divine_err.log`) by running,
+- A.13: Four sample scripts with datasets in `$DIVINE/gcn/bin/prioritize/examples` are available. Use the examples as a template. All three scripts should work if your installation were successful. If the problem is not resolved, send me a log file (e.g., `divine_err.log`) by running,
 
 ```
 $ your_divine_command 2>&1 | tee divine_err.log
@@ -383,10 +382,11 @@ $ your_divine_command 2>&1 | tee divine_err.log
 # Change Log
 - v.0.1.1 (June 15 2016)
     - Original release
-- v.0.1.2 (Aug 8 2018)
+- v.0.1.2 (Sep 12 2018)
     - Minor fix
     - protein domain pathogenicity
     - enhanced the new gene-to-disease association discovery
+    - Add trio sample in the demo example directory
     
 # License
 GNU GENERAL PUBLIC LICENSE
