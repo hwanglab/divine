@@ -132,7 +132,7 @@ Browse a lookup table and select HPO ID for each term that matches at best.
     ```
 1. At `$DIVINE/gcn/bin/prioritize/examples`, run this,
     ```bash
-    $ divine.py -q ./Angelman_Syndrome.hpo -o ./Angelman_Syndrome
+    $ ../divine.py -q ./Angelman_Syndrome.hpo -o ./Angelman_Syndrome
     ```
     The program takes the HPO file as an input and reports the result in the output directory (if not exist, it will create automatically).
     
@@ -166,7 +166,7 @@ Convert proband WES FASTQ files to a VCF file using GATK. Refer to [GATK Best pr
 1. Change to the example directory and run Divine on the VCF file,
     ```bash
     $ cd $DIVINE/gcn/bin/prioritize/examples
-    $ divine.py -v ./Pfeiffer.vcf -o ./Pfeiffer_noHpo
+    $ ../divine.py -v ./Pfeiffer.vcf -o ./Pfeiffer_noHpo
     ```
 1. It provides only VCF. As a default, Divine solely focuses on variants in exonic regions (coding and 3'/5UTR) with 20bp flanking. A user can specify an option for common filters (e.g., minimum MAF cutoff for 1000 genome database, ESP, and ExAC, HGMD, a minimum read depth for confident variant calls, and genomic location to include/exclude in the annotation process). Refer to `$DIVINE/gcn/conf/filterconf.txt`to customize the default parameters.
 
@@ -175,7 +175,7 @@ Consider a case where both HPO and VCF file are available. We have WES VCF file,
 1. Run this,
     ```bash
     $ cd $DIVINE/gcn/bin/prioritize/examples
-    $ divine.py -q ./MillerSyndrome.hpo -v ./MillerSyndrome.vcf -o ./MillerSyndrome
+    $ ../divine.py -q ./MillerSyndrome.hpo -v ./MillerSyndrome.vcf -o ./MillerSyndrome
     ```
 
 1. The job takes a while since it annotates variants with 30 databases or features. Check the output files in the output directory (`./MillerSyndrome`)
@@ -198,7 +198,6 @@ Consider a case where both HPO and VCF file are available. We have WES VCF file,
     - gt_dmg_score: a genetic pathogenicity score assessed in VCF file
     - pheno_score: score[FunSimMax]
     - contain_known_pathogenic: When the gene has a variant in the same genomic position reported in a known pathogenic database (ClinVar, Clinvitae, or HGMD), the value is 'Y'. If such database is not used in the run (`-k 0`), the value is `NA` 
-
 
 1. To explore a new gene-to-disease association 
     ```bash
@@ -228,6 +227,34 @@ This is an Excel file version summarizing the annotated VCF file above. Divine m
 
 ![Divine_workflow](images/divine_xls.PNG)
 
+### Family Sample
+Consider a case where not only proband but also parental samples are available. These days, molecular diagnosis with familial samples become popular since the number of false positive variants can be reduced. We need a pedigree file containing sample IDs and relationship. The sample ID should be matched with the one in a family sample VCF. Here, we include a family sample available from NIST (reference material). 
+1. Pedigree file
+	```bash
+	$ cd $DIVINE/gcn/bin/prioritize/examples
+	$ less -S trio.ped
+	#PED format pedigree
+	#
+	#fam-id/ind-id/pat-id/mat-id: 0=unknown
+	#sex: 1=male; 2=female; 0=unknown
+	#phenotype: -9=missing, 0=missing; 1=unaffected; 2=affected
+	#refer to https://www.coriell.org/0/Sections/Search/Sample_Detail.aspx?Ref=NA24385&Product=DNA for proband phenotype description
+	#
+	#fam-id ind-id  pat-id  mat-id  sex     phen
+	1       Sample_Diag-excap51-HG002-EEogPU        Sample_Diag-excap51-HG003-EEogPU        Sample_Diag-excap51-HG004-EEogPU        1       2
+	1       Sample_Diag-excap51-HG003-EEogPU        0       0       1       0
+	1       Sample_Diag-excap51-HG004-EEogPU        0       0       2       0
+	```
+2. Make sure that each sample ID in the multi-sample VCF file matches with the ones in the pedigree file. For a conversion from family FASTQ files to multi-sample VCF file, refer to [GATK](https://software.broadinstitute.org/gatk/).
+	  ```bash
+	$ grep ^#CHROM ./trio.vcf
+	#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  Sample_Diag-excap51-HG002-EEogPU  Sample_Diag-excap51-HG003-EEogPU        Sample_Diag-excap51-HG004-EEogPU
+	```
+3. Assume that proband ID we want to diagnose is `Sample_Diag-excap51-HG002-EEogPU`.
+	```bash
+	$ ../divine.py -q ./trio.hpo -v ./trio.vcf -f ./trio.ped -p Sample_Diag-excap51-HG002-EEogPU -o ./trio -e 1 -k 1 --reuse
+	```
+ 
 # Reference
 - OMIM: Online Mendelian Inheritance in Man, OMIM®. McKusick-Nathans Institute of Genetic Medicine, Johns Hopkins University (Baltimore, MD), {date}. World Wide Web URL: http://omim.org/
 - Sebastian Köhler, Sandra C Doelken, Christopher J. Mungall, Sebastian Bauer, Helen V. Firth, et al. "The Human Phenotype Ontology project: linking molecular biology and disease through phenotype data", Nucl. Acids Res. (1 January 2014) 42 (D1): D966-D974 doi:10.1093/nar/gkt1026

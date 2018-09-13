@@ -26,7 +26,7 @@ A [tutorial](https://github.com/hwanglab/divine/blob/master/documents/tutorial/d
 - If VCF file (or with HPO IDs), Divine also generates an annotated variant table with a ranking score in Microsoft Excel format.
 
 # Developer note
-- Divine is in active development. Please check the above website for newer available versions. Please contact the developer at hongc2<at>ccf.org to report any problems or for additional help.
+- Divine is in active development. Please check the above website for newer available versions. Please contact the developer at hongc2{at}ccf.org to report any problems or for additional help.
 
 # Setup
 
@@ -43,7 +43,7 @@ Divine requires the following modules but, during the setup process, the modules
 - *`fastsemsim-0.9.4`: https://sites.google.com/site/fastsemsim
 - *`hgvs`: https://github.com/counsyl/hgvs
 - *`hpo_similarity`: https://github.com/jeremymcrae/hpo_similarity
-- `ConfigParser, backports-abc, html5lib==0.999999999, backports.ssl-match-hostname, certifi,decorator, matplotlib, networkx, nose, numpy, pandas, pygr, pyparsing, pysam, python-dateutil, pytz,scipy, scikit-learn, singledispatch, six, tornado, xlwt, dill`
+- `ConfigParser, backports-abc, html5lib==0.999999999, backports.ssl-match-hostname, certifi,decorator, matplotlib, networkx, nose, numpy, pandas, pygr, pyparsing, pysam, python-dateutil, pytz,scipy, scikit-learn, singledispatch, six, tornado, xlwt, dill, ped_parser`
 
 - [*]: the python modules are already included in the Divine package.
 
@@ -54,16 +54,16 @@ download divine source codes from github
 $ git clone https://github.com/hwanglab/divine.git
 ```
 
-### Option 1: fresh install or to upgrade Divine resource package
+### Option 1: fresh install
 
 It requires downloading 21 GB database files and so be patient!
 ```
-$ setup.py --install --update_db
+$ setup.py --install
 ```
 
-### Optional 2: only reinstall python modules of dependency
+### Optional 2: upgrade Divine database/resource/examples/3rd-party python modules (when you previously installed Divine)
 ```
-$ setup.py --install
+$ setup.py --install --update_db
 ```
 
 ## Configuration
@@ -200,28 +200,38 @@ head -n6 diseases_rank.tsv
 - When HPO file is only given,
 
 ```
-divine.py -q dir_to_the_hpo/P0001.hpo -o dir_to_output/P0001
+../divine.py -q dir_to_the_hpo/P0001.hpo -o dir_to_output/P0001
 ```
 
 - When VCF file is only given,
 
 ```
-divine.py -v dir_to_the_vcf/P0002.vcf -o dir_to_output/P0002
+../divine.py -v dir_to_the_vcf/P0002.vcf -o dir_to_output/P0002
 ```
 
 - When both HPO file and VCF file are given,
 
 ```
-divine.py -q dir_to_the_hpo/P0003.hpo -v dir_to_the_vcf/P0003.vcf -o dir_to_output/P0003
+../divine.py -q dir_to_the_hpo/P0003.hpo -v dir_to_the_vcf/P0003.vcf -o dir_to_output/P0003
+```
+
+- When both HPO file and VCF file are given,
+
+```
+../divine.py -q dir_to_the_hpo/P0003.hpo -v dir_to_the_vcf/P0003.vcf -o dir_to_output/P0003
 ```
 
 ## Examples
-```
-cd $DIVINE/gcn/bin/prioritize/examples
-./runme_pfeisffer.sh
-./runme_millerSyndrome.sh
-./runme_angelman.sh
-```
+We include 4 to 5 demo samples in the resource package, 
+	
+	```
+	cd $DIVINE/gcn/bin/prioritize/examples
+	./runme_angelman.sh #when only HPO data is available
+	./runme_pfeisffer_noHpo.sh #when only VCF is available 
+	./runme_pfeisffer.sh #when both HPO and VCF are available
+	./runme_millerSyndrome.sh #when both HPO and VCF are available
+	./runme_trio.sh #analyze family samples (PED file requires and sample ID should be matched with the ones in VCF file)
+	```
 
 # Help
 ```
@@ -394,4 +404,4 @@ Not intended for direct clinical application. Divine suggests an order of genes 
 - Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data, Changjin Hong and TaeHyun Hwang (Oxford Bioinformatics Application Note)
 
 # Contact
-- Changjin Hong, Ph.D (hongc2<at>ccf.org)
+- Changjin Hong, Ph.D (hongc2{at}ccf.org)
