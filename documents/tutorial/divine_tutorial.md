@@ -254,7 +254,7 @@ Consider a case where not only proband but also parental samples are available. 
 	```bash
 	$ ../divine.py -q ./trio.hpo -v ./trio.vcf -f ./trio.ped -p Sample_Diag-excap51-HG002-EEogPU -o ./trio -e 1 -k 1 --reuse
 	```
- 
+
 # Reference
 - OMIM: Online Mendelian Inheritance in Man, OMIM®. McKusick-Nathans Institute of Genetic Medicine, Johns Hopkins University (Baltimore, MD), {date}. World Wide Web URL: http://omim.org/
 - Sebastian Köhler, Sandra C Doelken, Christopher J. Mungall, Sebastian Bauer, Helen V. Firth, et al. "The Human Phenotype Ontology project: linking molecular biology and disease through phenotype data", Nucl. Acids Res. (1 January 2014) 42 (D1): D966-D974 doi:10.1093/nar/gkt1026
@@ -262,3 +262,4 @@ Consider a case where not only proband but also parental samples are available. 
 - CADD: http://cadd.gs.washington.edu/
 - Varant: http://compbio.berkeley.edu/proj/varant/publication.html
 - Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data, Changjin Hong and TaeHyun Hwang (Oxford Bioinformatics Application Note)
+
