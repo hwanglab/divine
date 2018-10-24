@@ -1,4 +1,4 @@
-# Tutorial for Research Institute High performance Linux cluster at Cleveland Clinic Lerner
+# Tutorial for Lerner Research Institute High performance Linux cluster at Cleveland Clinic
 Research who currently work at Cleveland Clinic and have a Linux account in LRI HPC node can freely use the latest version of 'divine'
 
 1. SSH to HPC's login node.
@@ -10,7 +10,7 @@ Research who currently work at Cleveland Clinic and have a Linux account in LRI 
 	```bash
 	mkdir -p $HOME/bin
 	ln -s /cm/shared/apps/python/2.7.13/bin/pip $HOME/bin
-	ln -s /cm/shared/apps/python/2.7.13/bin/python2.7 $HOME/bin
+	ln -s /cm/shared/apps/python/2.7.13/bin/python2.7 $HOME/bin/python
 	```
 
 1. Open your bash configuration to define Divine path and environment
