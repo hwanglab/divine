@@ -32,8 +32,9 @@ Research who currently work at Cleveland Clinic and have a Linux account in LRI 
 	#save the file and exit (e.g., :wq!)
 	```
 
-1. Relogin to make the divine environment active
+1. Apply divine environment and install some required python modules
 	```bash
+	source ~/.bashrc
 	pip install --user -r $DIVINE/requirements.txt
 	python $DIVINE/gcn/bin/prioritize/divine.py --help
 	```
