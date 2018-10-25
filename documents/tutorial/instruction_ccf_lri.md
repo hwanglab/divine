@@ -19,7 +19,9 @@ Research who currently work at Cleveland Clinic and have a Linux account in LRI 
 	# add the following lines at the end of the file,
 	
 	# divine setup
-	export PATH=$HOME/bin:$PATH
+	export PATH=$HOME/.local/bin:$PATH #if not defined
+	export PATH=$HOME/bin:$PATH #if not defined
+
 	export DIVINE=/mnt/isilon/data/w_QHS/hwangt-share/apps/divine
 	export GCN=$DIVINE/gcn
 	export GCN_DATA_DIR=$DIVINE/gcndata
@@ -32,8 +34,10 @@ Research who currently work at Cleveland Clinic and have a Linux account in LRI 
 
 1. Relogin to make the divine environment active
 	```bash
+	pip install --user -r $DIVINE/requirements.txt
 	python $DIVINE/gcn/bin/prioritize/divine.py --help
 	```
+	
 1. Copy Divine example directory to your Divine project directory to work with
 	```bash
 	mkdir -p $HOME/projects/divine
@@ -50,4 +54,4 @@ Research who currently work at Cleveland Clinic and have a Linux account in LRI 
 	# check the result in the directory
 	cd ./Pfeiffer
 	```
-1. Modify the example bash scripts for your sbatch script 
+1. Modify the example bash scripts for your sbatch script
