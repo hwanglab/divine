@@ -41,8 +41,8 @@ Research who currently work at Cleveland Clinic and have a Linux account in LRI 
 	
 1. Copy Divine example directory to your Divine project directory to work with
 	```bash
-	mkdir -p $HOME/projects/divine
-	cd $HOME/projects/divine
+	mkdir -p $HOME/lustre/projects/divine
+	cd $HOME/lustre/projects/divine
 	cp -r $DIVINE/gcn/bin/prioritize/examples ./
 	cd examples
 	
