@@ -50,7 +50,7 @@ Research who currently work at Cleveland Clinic and have a Linux account in LRI 
 	# https://github.com/hwanglab/divine/blob/master/documents/tutorial/divine_tutorial.md
 	# for example,
 
-	bash ./run_pfeisffer.sh
+	bash ./runme_pfeisffer.sh
 	
 	# check the result in the directory
 	cd ./Pfeiffer
