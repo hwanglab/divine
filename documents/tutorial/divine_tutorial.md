@@ -53,7 +53,7 @@ $ mkdir -p ~/apps #make a directory if not exist
 $ cd ~/apps
 $ git clone https://github.com/hwanglab/divine.git
 $ cd divine
-$ setup.py --install --update_db #it will take 1 to 2 hours
+$ setup.py --install #it will take 1 to 2 hours
 ```
 At the end of the installation, a message will instruct you to add environment variables in your bash script configuration file (e.g., $HOME/.bashrc or $HOME/.bash_profile). For example, open `~/.bashrc` using vi and then add the following lines at the end if not exist,
  
