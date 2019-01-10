@@ -32,7 +32,7 @@ Lerner Research Institute, Cleveland Clinic\
 Cleveland, OH 44106
 
 #### Citation
-Changjin Hong *et al*. "Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data"
+Changjin Hong *et al*. [Divine: Prioritizing Genes for Rare Mendelian Disease in Whole Exome Sequencing Data](https://www.biorxiv.org/content/biorxiv/early/2018/08/21/396655.full.pdf)
 
 #### Help
 For support queries, please open a ticket, contact us at [https://github.com/hwanglab/divine/issues](https://github.com/hwanglab/divine/issues).
@@ -59,7 +59,7 @@ At the end of the installation, a message will instruct you to add environment v
  
 ```bash
 export DIVINE=$HOME/apps/divine
-export PATH=$DIVINE/gcn/bin/prioritize:$PATH
+export PATH=$DIVINE/gcn/bin/prioritize:$HOME/.local/bin:$PATH
 export PYTHONPATH=$DIVINE/python_libs/lib/python2.7/site-packages:$PYTHONPATH
 export PYTHONPATH=$DIVINE:$PYTHONPATH
 ```
