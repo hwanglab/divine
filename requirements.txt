@@ -1,0 +1,27 @@
+# Used by Divine
+ConfigParser
+backports-abc
+html5lib==0.999999999
+backports.ssl-match-hostname
+certifi
+decorator
+matplotlib
+networkx
+nose
+numpy
+pandas
+pygr
+pyparsing
+pysam
+python-dateutil
+pytz
+scipy
+scikit-learn
+singledispatch
+six
+tornado
+xlwt
+dill
+ped_parser
+fastsemsim
+genmod

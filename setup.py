@@ -69,14 +69,12 @@ class Setup():
 		#to get the current directory
 		self.install_dir = os.path.dirname(os.path.abspath(__file__))
 		self.py_libs_dir = os.path.join(self.install_dir,'python_libs','pkg')
-		self.py_libs_prefix = ['fastsemsim-0.9.4','hgvs','hpo_similarity','genmod']
-		self.py_libs = ['fastsemsim','pyhgvs','hpo_similarity','genmod']
+		self.py_libs_prefix = ['hgvs','hpo_similarity']
+		self.py_libs = ['pyhgvs','hpo_similarity']
 		
-		self.py_modules = ['ConfigParser','backports-abc','html5lib==0.999999999',\
-			'backports.ssl-match-hostname','certifi','decorator',\
-				'matplotlib','networkx','nose','numpy','pandas','pygr',\
-					'pyparsing','pysam','python-dateutil','pytz','scipy',\
-						'scikit-learn','singledispatch','six','tornado','xlwt','dill','ped_parser']
+		self.requirement_file = os.path.join(self.install_dir,'requirements.txt')
+		if not os.path.exists(self.requirement_file):
+			raise  IOError('check if the file [requirements.txt] exists in the divine root directory!')
 
 		self.pylib_prefix = 'python_libs'
 		self.pylib = os.path.join(self.install_dir,self.pylib_prefix)
@@ -91,7 +89,7 @@ class Setup():
 		self.gcndb = 'gcndb'
 		self.gcnlog = 'gcn/logs/gcn.log'
 		log_dir = os.path.join(self.install_dir,'gcn','logs')
-		if os.path.exists(log_dir):
+		if not os.path.exists(log_dir):
 			os.makedirs(log_dir)
 
 		self.user_has_pythonpath=os.environ.get('PYTHONPATH',None)
@@ -104,9 +102,16 @@ class Setup():
 		if not os.path.exists(self.url_fn):
 			raise RuntimeError('a config file[%s] for resource packages does not exist!'%self.url_fn)
 
+	def install_requirement_by_pip(self,requirement_file):
+		print 'installing modules defined in %s ...' % requirement_file
+		cmd = "pip install --user -r %s" % requirement_file
+		print cmd
+		syscmd(cmd)
+
 	def install_module_by_pip(self,pkg_name):
 		print 'installing %s ...'%pkg_name
 		cmd = "pip install --user %s"%pkg_name
+		print cmd
 		syscmd(cmd)
 
 	def download_ucsc_hg19(self,reuse=True):
@@ -268,13 +273,10 @@ class Setup():
 		
 	def install_python_libs(self):
 		#to make sure that PYTHONPATH includes the directory to install python modules
-		
-		for module in self.py_modules:
-			if not has_module(module):
-				print 'installing [%s] ...'%module
-				self.install_module_by_pip(module)
-				print 'done.'
-		
+
+		#install python modules defined in $DIVINE/requirements.txt
+		self.install_requirement_by_pip(self.requirement_file)
+
 		#download python_lib zip file
 		self.download_data(ucategory='MODULES')
 
@@ -368,7 +370,7 @@ class Setup():
 def main():
 	parser = argparse.ArgumentParser(description="Divine setup (v%s) [author:%s]"%(VERSION,author_email))
 	parser.add_argument('--install', action='store_const', dest='install', required=False, default=False, const=True, help='install Divine')
-	parser.add_argument('--update_db', action='store_const', dest='update_db', required=False, default=False, const=True, help='update_db [False]')
+	parser.add_argument('--update_db', action='store_const', dest='update_db', required=False, default=False, const=True, help='enable this option to apply only updated database. Not recommend for a clean installation [False]')
 	parser.add_argument('-c', action='store', dest='url_fn', required=False, default=None, help='a file containing URL to download divine resource files')
 	parser.add_argument('--uninstall', action='store_const', dest='uninstall', required=False, default=False, const=True, help='uninstall Divine')
 	parser.add_argument('--remove_db', action='store_const', dest='remove_db', required=False, default=False, const=True, help='remove_db [False]')

@@ -40,12 +40,11 @@ A [tutorial](https://github.com/hwanglab/divine/blob/master/documents/tutorial/d
 ## Python modules to be installed
 Divine requires the following modules but, during the setup process, the modules will be installed automatically if necessary.
 
-- *`fastsemsim-0.9.4`: https://sites.google.com/site/fastsemsim
-- *`hgvs`: https://github.com/counsyl/hgvs
-- *`hpo_similarity`: https://github.com/jeremymcrae/hpo_similarity
-- `ConfigParser, backports-abc, html5lib==0.999999999, backports.ssl-match-hostname, certifi,decorator, matplotlib, networkx, nose, numpy, pandas, pygr, pyparsing, pysam, python-dateutil, pytz,scipy, scikit-learn, singledispatch, six, tornado, xlwt, dill, ped_parser`
+- `hgvs`: https://github.com/counsyl/hgvs
+- `hpo_similarity`: https://github.com/jeremymcrae/hpo_similarity
+- *`ConfigParser, backports-abc, html5lib==0.999999999, backports.ssl-match-hostname, certifi,decorator, matplotlib, networkx, nose, numpy, pandas, pygr, pyparsing, pysam, python-dateutil, pytz,scipy, scikit-learn, singledispatch, six, tornado, xlwt, dill, ped_parser, fastsemsim, genmod`
 
-- [*]: the python modules are already included in the Divine package.
+- [*]: the python modules are defined in the requirements.txt.
 
 ## Install
 
@@ -61,7 +60,7 @@ It requires downloading 21 GB database files and so be patient!
 $ setup.py --install
 ```
 
-### Optional 2: upgrade Divine database/resource/examples/3rd-party python modules (when you previously installed Divine)
+### Optional 2: Previously installed but want to upgrade Divine database/resource/examples/3rd-party python modules (when you previously installed Divine)
 ```
 $ setup.py --install --update_db
 ```
@@ -240,7 +239,7 @@ usage: divine.py [-h] [-q HPO_QUERY] [-v VCF] [-o OUT_DIR] [-c VCF_FILTER_CFG]
                  [-C CADD] [-j COSMIC] [-D DBLINK] [-H HGMD] [-k VKNOWN]
                  [-t CAPKIT] [--reuse]
 
-Divine (v0.1.2) [author:hongc2@ccf.org]
+Divine (v0.1.2) [author:hongc2<at>ccf.org]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -324,7 +323,7 @@ min=0.1
 
 - Q.3: I purchase HGMD professional license and how can I use this feature?
 
-- A.3: Contact to hongc2@ccf.org
+- A.3: Contact to hongc2<at>ccf.org
 
 - Q.4: Previously, I ran Divine on a patient sample dataset which took so long. Now, I want to prioritize genes with a different setting (e.g., filtering condition or a different option in `divine.py`) and I am sure that I didn't update Divine/GCN database. How can I make the repeat analysis faster?
 

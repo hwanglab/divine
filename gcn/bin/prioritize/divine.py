@@ -252,7 +252,6 @@ class Divine:
 
 		self._set_config('program_paths', 'varant')
 		self._set_config('program_paths', 'hposim')
-		self._set_config('program_paths', 'genmod')
 		self._set_config('program_paths', 'vcf2xls')
 		
 		self._set_config('config', 'temp_dir')
@@ -367,7 +366,7 @@ class Divine:
 
 		if not os.path.exists(os.path.join(genmod_db_dir, 'genes.db')) or \
 				not os.path.exists(os.path.join(genmod_db_dir, 'exons.db')):
-			cmd = [self.entries["genmod"], "build", \
+			cmd = ["genmod", "build", \
 						 "-t", "gene_pred", \
 						 "--splice_padding", "2", \
 						 "-o", genmod_db_dir, \
@@ -377,11 +376,11 @@ class Divine:
 			lib_utils.runcmd2(cmd, self.log_dir, self.logger, job_name)
 
 		vcf_genmod_out = lib_utils.file_tag2(self.vcf, 'genmod', '')
-		cmd = [self.entries["genmod"], "annotate", \
+		cmd = ["genmod", "annotate", \
 					 "-r", \
 					 self.vcf, \
 					 "|", \
-					 self.entries["genmod"], "models", \
+					 "genmod", "models", \
 					 "-", \
 					 "--family_file", self.ped, \
 					 "-o", vcf_genmod_out]
