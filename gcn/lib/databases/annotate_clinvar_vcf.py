@@ -7,9 +7,11 @@
 		:synopsis: Transparent opening of compressed and uncompressed files
 
 .. moduleauthor:: ; changjin.hong@gmail.com
+- 2018/01: ALLELEID is not available from clinvar.vcf.gz
 """
+
 import os, dill, re, argparse
-from gcn.lib.databases.snpdb import Clinvar
+from gcn.lib.databases.snpdb import ClinvarDB
 from collections import namedtuple
 from gcn.lib.databases.ready2upload import lib_hgmd
 from gcn.lib.databases.refgene import Refgene
@@ -175,7 +177,7 @@ def append_annotation_to_vcf(vcf_fn, vars_to_summuary, submissions, out_vcf):
 	for rec in v:
 		v.parseinfo(rec)
 		found = False
-		for j, rcv_ids in enumerate([rec.id,rec.info.CLNACC]):
+		for j, rcv_ids in enumerate([rec.id,rec.info.ALLELEID]):
 			if not found:
 				for rcv_id in rcv_ids:
 					if j == 1: #strip off version
@@ -204,8 +206,8 @@ def append_annotation_to_vcf(vcf_fn, vars_to_summuary, submissions, out_vcf):
 						found = True
 						break
 
-		for j,clndbn in enumerate(rec.info.CLNDBN):
-			rec.info.CLNDBN[j] = clndbn.replace('\\x2c_', ',').replace('\\x2c', ',')
+		for j,clndbn in enumerate(rec.info.CLNDN):
+			rec.info.CLNDN[j] = clndbn.replace('\\x2c_', ',').replace('\\x2c', ',')
 
 		v.write(ostream, rec)
 
@@ -231,16 +233,16 @@ def append_annotation_to_vcf2(vcf_fn, vars_to_summuary, submissions, out_vcf):
 	for rec in v:
 		v.parseinfo(rec)
 
-		# clnacc = re.split('[|,]', rec.info.CLNACC)
-		# rec.info.CLNACC = '|'.join(list(set(clnacc)))
+		# clnacc = re.split('[|,]', rec.info.ALLELEID)
+		# rec.info.ALLELEID = '|'.join(list(set(clnacc)))
 
 		uniq_rcv_ids = []
-		for rcv_id_str in rec.info.CLNACC:
+		for rcv_id_str in rec.info.ALLELEID:
 			for rcv_id in rcv_id_str.split('|'):
 				if rcv_id in uniq_rcv_ids: continue
 				uniq_rcv_ids.append(rcv_id)
 
-		# print 'rec.info.CLNACC:',rec.info.CLNACC #cj_debug
+		# print 'rec.info.ALLELEID:',rec.info.ALLELEID #cj_debug
 		for rcv_id in uniq_rcv_ids:
 
 			rcv_id = rcv_id.split('.')[0]
@@ -268,9 +270,9 @@ def append_annotation_to_vcf2(vcf_fn, vars_to_summuary, submissions, out_vcf):
 				found = True
 				break
 
-		rec.info.CLNACC = uniq_rcv_ids
-		for j,clndbn in enumerate(rec.info.CLNDBN):
-			rec.info.CLNDBN[j] = clndbn.replace('\\x2c_', ',').replace('\\x2c', ',')
+		rec.info.ALLELEID = uniq_rcv_ids
+		for j,clndbn in enumerate(rec.info.CLNDN):
+			rec.info.CLNDN[j] = clndbn.replace('\\x2c_', ',').replace('\\x2c', ',')
 
 		v.write(ostream, rec)
 
@@ -280,7 +282,7 @@ def append_annotation_to_vcf2(vcf_fn, vars_to_summuary, submissions, out_vcf):
 
 def pathogenic_per_gene(cds_len_per_gene,hgmd_on=False):
 
-	clnStat = Clinvar()
+	clnStat = ClinvarDB()
 
 	vartypes = clnStat.count_lofs()
 

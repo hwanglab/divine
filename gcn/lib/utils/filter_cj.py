@@ -112,7 +112,7 @@ class Filter:
         self.fltrincl = []
         self.fltrexcl = []
         self.regincl = []
-        self.regexcl = []
+        self.regexcl = ['Syn']
         self.freqincl = []
         self.cli_freqincl = []
         self.geneincl = []
@@ -340,6 +340,8 @@ class Filter:
                           
                     for t in gd['TRANSCRIPTS']:
                         if self.regincl=='all' or t.region in self.regincl:
+                          if t.mutation in self.regexcl:
+                            continue
                           region = [t.trans_id, t.region, t.protein_len, inherited]
                           if t.region in exonic: #CodingExonic,NonCodingExonic
                             if t.splice in splc_coding:
@@ -710,7 +712,6 @@ if __name__ == "__main__":
       
         if rec[v.samples[sidx]].GT == './.':
           continue
-
       retain, dTxes, rec.info.CLASS_TAG = f.retain(rec)
       if retain:
         v.write(ostream, rec)

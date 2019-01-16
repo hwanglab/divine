@@ -13,6 +13,7 @@ regulome=no
 #min_depth=10
 [reg]
 incl=CodingExonic:NonCodingExonic:CodingIntronic:NonCodingIntronic
+excl=Syn
 [freq]
 incl=0.01
 [freq_cli]
