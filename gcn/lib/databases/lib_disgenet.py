@@ -187,3 +187,4 @@ class Disgenet:
 				disGenes[umls2did[dnet.diseaseId]].append(dnet.geneName)
 		
 		return disGenes
+
